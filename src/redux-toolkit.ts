@@ -1,4 +1,5 @@
 import { createSlice, PayloadAction, configureStore } from '@reduxjs/toolkit';
+import logger from 'redux-logger';
 import { v1 as uuid } from 'uuid';
 import { Todo } from './type';
 
@@ -90,6 +91,14 @@ const reducer = {
 
 const Store = configureStore({
   reducer,
+  middleware: (getDefaultMiddleware) => {
+    const middlewares = [];
+    if (process.env.NODE_ENV !== 'production') {
+      middlewares.push(logger);
+    }
+    return [...getDefaultMiddleware(), ...middlewares];
+  },
+  devTools: process.env.NODE_ENV !== 'production',
 });
 
 export default Store;
